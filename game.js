@@ -13,6 +13,7 @@ const COLORS = [
   '#e57373', // Z - red
   '#ff6d00', // J - neon orange
   '#7986cb', // L - indigo
+  '#ff4081', // RING (reto) - rosa neón
 ];
 
 const PIECES = [
@@ -24,9 +25,13 @@ const PIECES = [
   [[5,5,0],[0,5,5],[0,0,0]],                  // Z
   [[6,0,0],[6,6,6],[0,0,0]],                  // J
   [[0,0,7],[7,7,7],[0,0,0]],                  // L
+  [[8,8,8],[8,0,8],[8,8,8]],                  // RING (reto, hueca)
 ];
 
 const LINE_SCORES = [0, 100, 300, 500, 800];
+const STANDARD_PIECES = 7;
+const CHALLENGE_TYPE = 8;
+const CHALLENGE_CHANCE = 0.08;
 
 const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
@@ -48,7 +53,9 @@ function createBoard() {
 }
 
 function randomPiece() {
-  const type = Math.floor(Math.random() * 7) + 1;
+  const type = Math.random() < CHALLENGE_CHANCE
+    ? CHALLENGE_TYPE
+    : Math.floor(Math.random() * STANDARD_PIECES) + 1;
   const shape = PIECES[type].map(row => [...row]);
   return { type, shape, x: Math.floor(COLS / 2) - Math.floor(shape[0].length / 2), y: 0 };
 }

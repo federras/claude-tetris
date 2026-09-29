@@ -18,12 +18,12 @@ Single-page Tetris game — vanilla HTML5 Canvas + CSS + JS (ES6), zero dependen
 
 - **index.html** — Canvas elements (#board 300x600, #next-canvas 120x120), HUD (score/lines/level), game-over overlay
 - **style.css** — Dark retro theme (#0f0f17 bg), overlay with backdrop-blur
-- **game.js** — All game logic (~305 lines, `'use strict'`)
+- **game.js** — All game logic (~330 lines, `'use strict'`)
 
 ## Architecture (game.js)
 
 **State model** (10 mutable globals, all reset in `init()`):
-- `board[][]` — 20×10 grid, 0 = empty, 1-7 = piece type color index
+- `board[][]` — 20×10 grid, 0 = empty, 1-7 = standard piece, 8 = challenge ring (color index)
 - `current {shape, x, y, type}` — active falling piece
 - `next` — next piece in preview
 - `score/lines/level/dropInterval` — game progression
@@ -38,8 +38,9 @@ Single-page Tetris game — vanilla HTML5 Canvas + CSS + JS (ES6), zero dependen
 
 **Customization** (edit constants at top of `game.js`):
 - `COLS/ROWS/BLOCK` — board dimensions and cell size
-- `COLORS[1-7]` — 7 tetromino colors
-- `PIECES[1-7]` — I,O,T,S,Z,J,L shape matrices
+- `COLORS[1-8]` — 7 tetromino colors + ring
+- `PIECES[1-8]` — I,O,T,S,Z,J,L shape matrices + hollow 3x3 ring (8)
+- `STANDARD_PIECES/CHALLENGE_TYPE/CHALLENGE_CHANCE` — count of standard pieces, ring type index, ring spawn probability (0.08) in `randomPiece()`
 - `LINE_SCORES[0-4]` — points per lines cleared (× level)
 - `dropInterval` formula in `clearLines()` — speed ramp
 
@@ -47,7 +48,7 @@ Single-page Tetris game — vanilla HTML5 Canvas + CSS + JS (ES6), zero dependen
 
 ## Common Tasks
 
-- **Tweak gameplay**: Edit constants in `game.js` lines 3-29
-- **Add new piece**: Append to `PIECES` and `COLORS` arrays
-- **Change controls**: Modify `keydown` switch at line 280
+- **Tweak gameplay**: Edit constants in `game.js` lines 3-34
+- **Add new piece**: Append to `PIECES` and `COLORS`; cell values = its index. Standard: insert before the ring and bump `STANDARD_PIECES`. Rare: add a branch in `randomPiece()`
+- **Change controls**: Modify `keydown` switch at line 289
 - **Change scoring**: Edit `LINE_SCORES` or scoring logic in `clearLines()`/`hardDrop()`/`softDrop()`
