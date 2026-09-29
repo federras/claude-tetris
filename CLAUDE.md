@@ -43,6 +43,8 @@ Single-page Tetris game — vanilla HTML5 Canvas + CSS + JS (ES6), zero dependen
 - `LINE_SCORES[0-4]` — points per lines cleared (× level)
 - `dropInterval` formula in `clearLines()` — speed ramp
 
+**Theme toggle** (dark by default, not persisted): `#theme-toggle` sets `data-theme="light"|"dark"` on `<html>`. Colors live in CSS variables (`:root` = dark, `[data-theme="light"]` = light) in `style.css`; `drawGrid()` reads `--grid-line` from them and the click handler redraws the canvases.
+
 ## Common Tasks
 
 - **Tweak gameplay**: Edit constants in `game.js` lines 3-29
