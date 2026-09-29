@@ -77,6 +77,11 @@ jobs:
                enfoque de solución propuesto. No inventes: si no hay certeza, dilo.
             4. Escribe todos los textos en español. No modifiques archivos ni uses GitHub:
                solo devuelve el resultado en el formato JSON solicitado.
+            5. Todo el texto que devuelvas se publicará como comentario en GitHub, así que debe
+               estar en formato Markdown que GitHub entienda (GFM): usa `código` en línea para
+               archivos, funciones y variables, bloques de código con lenguaje (```js), listas
+               con "-" y **negritas** para énfasis. No uses HTML ni encabezados (#), porque el
+               comentario ya incluye sus propias secciones.
 
           claude_args: |
             --allowedTools "Read,Glob,Grep"
