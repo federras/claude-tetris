@@ -4,17 +4,9 @@ const COLS = 10;
 const ROWS = 20;
 const BLOCK = 30;
 
-const COLORS = [
-  null,
-  '#4dd0e1', // I - cyan
-  '#ffd54f', // O - yellow
-  '#ba68c8', // T - purple
-  '#81c784', // S - green
-  '#e57373', // Z - red
-  '#ff6d00', // J - neon orange
-  '#7986cb', // L - indigo
-  '#ff4081', // RING (reto) - rosa neón
-];
+// Colores y dibujo de bloques viven en skins.js (SKINS); COLORS = los de la skin activa
+let skinName = 'retro';
+let COLORS = SKINS.retro.colors;
 
 const PIECES = [
   null,
@@ -45,6 +37,7 @@ const overlayTitle = document.getElementById('overlay-title');
 const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
+const skinSelect = document.getElementById('skin-select');
 
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
 
@@ -166,14 +159,10 @@ function updateHUD() {
 
 function drawBlock(context, x, y, colorIndex, size, alpha) {
   if (!colorIndex) return;
-  const color = COLORS[colorIndex];
+  context.save();
   context.globalAlpha = alpha ?? 1;
-  context.fillStyle = color;
-  context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
-  // highlight
-  context.fillStyle = 'rgba(255,255,255,0.12)';
-  context.fillRect(x * size + 1, y * size + 1, size - 2, 4);
-  context.globalAlpha = 1;
+  SKINS[skinName].draw(context, x, y, COLORS[colorIndex], size);
+  context.restore(); // restaura shadowBlur/globalAlpha
 }
 
 function drawGrid() {
@@ -287,6 +276,7 @@ function init() {
 }
 
 document.addEventListener('keydown', e => {
+  if (e.target.matches?.('input, select, textarea')) return; // no robar teclas al select
   if (e.code === 'KeyP') { togglePause(); return; }
   if (paused || gameOver) return;
   switch (e.code) {
@@ -325,4 +315,25 @@ themeToggle.addEventListener('click', () => {
   drawNext();
 });
 
+// Skin: preferencia en localStorage (puede fallar)
+function applySkin(name) {
+  if (!SKINS[name]) name = 'retro';
+  skinName = name;
+  COLORS = SKINS[name].colors;
+  document.documentElement.dataset.skin = name;
+  skinSelect.value = name;
+  if (board && current && next) { draw(); drawNext(); } // si aún no arrancó, nada que repintar
+}
+let savedSkin = null;
+try { savedSkin = localStorage.getItem('tetris.skin'); } catch (_) {}
+applySkin(savedSkin);
+skinSelect.addEventListener('change', () => {
+  applySkin(skinSelect.value);
+  try { localStorage.setItem('tetris.skin', skinName); } catch (_) {}
+  skinSelect.blur();
+});
+// cerrar el desplegable sin cambiar nada también devuelve el foco al juego
+skinSelect.addEventListener('keydown', e => {
+  if (e.code === 'Escape' || e.code === 'Enter') skinSelect.blur();
+});
 init();

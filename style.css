@@ -77,6 +77,45 @@ body {
   border-color: var(--accent);
 }
 
+/* ---- Selector de skin ---- */
+#skin-select {
+  position: fixed;
+  top: 16px;
+  right: 110px;
+  background: var(--board-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#skin-select:hover {
+  border-color: var(--accent);
+}
+
+/* Skins: fondo de canvas/grid; conviven con data-theme (Neon fuerza negro) */
+html[data-skin="neon"] {
+  --board-bg: #000000;
+  --grid-line: #1a1a3a;
+  --border: #2a2a55;
+}
+
+html[data-skin="pastel"] {
+  --grid-line: rgba(150, 140, 190, 0.2);
+}
+
+html[data-skin="pastel"][data-theme="light"] {
+  --board-bg: #fff8fc;
+}
+
+html[data-skin="pixel"] #board,
+html[data-skin="pixel"] #next-canvas {
+  border-radius: 0;
+}
+
 /* ---- Título ---- */
 .title {
   font-size: 40px;
