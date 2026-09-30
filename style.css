@@ -235,3 +235,121 @@ kbd {
 #restart-btn:hover {
   background: var(--accent-hover);
 }
+
+/* ---- Records y pantalla de inicio ---- */
+.start-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: var(--value);
+}
+
+#play-btn,
+#go-save-btn {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s;
+}
+
+#go-save-btn {
+  padding: 8px 14px;
+}
+
+#play-btn:hover,
+#go-save-btn:hover {
+  background: var(--accent-hover);
+}
+
+#reset-records-btn {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#reset-records-btn:hover {
+  background: var(--danger);
+  color: var(--accent-text);
+}
+
+.records {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  width: 240px;
+}
+
+.records.hidden,
+.name-form.hidden {
+  display: none;
+}
+
+.top-list {
+  list-style: none;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+}
+
+.top-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.top-list li.empty {
+  justify-content: center;
+  color: var(--muted);
+}
+
+.top-list li.highlight {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.rec-stats,
+.rec-msg {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.rec-msg {
+  color: var(--value);
+  font-weight: 600;
+}
+
+.name-form {
+  display: flex;
+  gap: 6px;
+}
+
+#go-name {
+  width: 140px;
+  background: var(--board-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  user-select: text;
+}
+
+#go-name:focus {
+  outline: none;
+  border-color: var(--accent);
+}

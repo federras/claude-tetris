@@ -47,6 +47,7 @@ const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
 
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
+let started = false, combo = 0, maxCombo = 0; // started: false mientras se ve la pantalla de inicio
 
 function createBoard() {
   return Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
@@ -118,6 +119,7 @@ function clearLines() {
     dropInterval = Math.max(100, 1000 - (level - 1) * 90);
     updateHUD();
   }
+  combo = cleared ? combo + 1 : 0; maxCombo = Math.max(maxCombo, combo); // combo de piezas consecutivas
 }
 
 function ghostY() {
@@ -235,6 +237,7 @@ function endGame() {
   overlayTitle.textContent = 'GAME OVER';
   overlayScore.textContent = `Puntuación: ${score.toLocaleString()}`;
   overlay.classList.remove('hidden');
+  if (typeof onGameOver === 'function') onGameOver(); // records.js
 }
 
 function togglePause() {
@@ -275,6 +278,7 @@ function init() {
   level = 1;
   paused = false;
   gameOver = false;
+  started = true; combo = 0; maxCombo = 0;
   dropInterval = 1000;
   dropAccum = 0;
   lastTime = performance.now();
@@ -287,6 +291,7 @@ function init() {
 }
 
 document.addEventListener('keydown', e => {
+  if (!started || /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
   if (e.code === 'KeyP') { togglePause(); return; }
   if (paused || gameOver) return;
   switch (e.code) {
@@ -321,8 +326,10 @@ themeToggle.addEventListener('click', () => {
   themeToggle.setAttribute('aria-label', light ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro');
   themeToggle.blur(); // evita que Espacio/flechas actúen sobre el botón
   // repintar también en pausa o game over
-  draw();
-  drawNext();
+  if (current && next) { draw(); drawNext(); } // antes de init() no hay estado
 });
 
-init();
+// records.js (cargado después) aporta la pantalla de inicio; sin él, arranca directo
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof showStartScreen === 'function') showStartScreen(); else init();
+});
